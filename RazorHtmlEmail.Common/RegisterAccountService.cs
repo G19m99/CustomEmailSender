@@ -27,7 +27,8 @@ namespace RazorHtmlEmail.Common
             string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
 
             var toAddress = email;
-            SendEmail(toAddress, "gershymenzer@gmail.com", "Please confirm", body);
+            var fromAddress = "<ADD YOUR EMAIL HERE>";
+            SendEmail(toAddress, fromAddress, "Please confirm", body);
         }
         public async Task Invoice(string email, string baseUrl, int order_id, int plug_amt, int tire_amt, decimal amt_due, DateTime date)
         {
@@ -36,7 +37,8 @@ namespace RazorHtmlEmail.Common
             string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/InvoiceEmail/CreateInvoiceEmail.cshtml", CreateInvoiceModel);
 
             var toAddress = email;
-            SendEmail(toAddress, "gershymenzer@gmail.com", "Here's youre invoice", body);
+            var fromAddress = "<ADD YOUR EMAIL HERE>";
+            SendEmail(toAddress, fromAddress, "Here's youre invoice", body);
         }
         public static void SendEmail(string toAddresses, string fromAddress, string subject, string body)
         {
@@ -50,8 +52,8 @@ namespace RazorHtmlEmail.Common
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential()
                 {
-                    UserName = "gershymenzer@gmail.com",
-                    Password = "wnoeeydzyvmrfrrd"
+                    UserName = "<ADD YOUR EMAIL HERE>",
+                    Password = "<PASSWORD (RANDOM)>"
                 }
             };
             MailAddress fromEmail = new MailAddress(fromAddress);
