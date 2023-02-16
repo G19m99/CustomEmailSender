@@ -1,0 +1,47 @@
+﻿@using RazorHtmlEmails.RazorClassLib.Views.Shared;
+@using RazorHtmlEmails.RazorClassLib.Views.Emails.InvoiceEmail;
+@model CreateInvoiceEmailViewModel
+
+@{
+     ViewData["EmailTitle"] = $"Here's your invoice #{Model.order_id}";
+}
+<p>Thank you for using <span>theTire shop on wheels</span>. here's your invoice for today service.</p>
+<p>click below to be taken to the payment page</p>
+
+<table style="width:50%; margin-left: auto; margin-right: auto; border:2px solid black; text-align: center;">
+    <thead style="border-bottom: 1px solid black;">
+        <tr>
+            <th>service</th>
+            <th>amount</th>
+            <th>price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.plug_amt > 0)
+        {
+            <tr>
+                <td>Plug</td>
+                <td>@Model.plug_amt</td>
+                <td>@Model.amt_due</td>
+            </tr>
+        }
+        @if(Model.tire_amt > 0)
+        {
+            <tr>
+                <td>Tire's</td>
+                <td>@Model.tire_amt</td>
+                <td>@Model.amt_due</td>
+            </tr>
+        }
+
+        <tr>
+            <td>Total</td>
+            <td>@Model.amt_due</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+
+@await Html.PartialAsync("EmailButton", new EmailButtonViewModel("Pay now", Model.baseUrl))
+
+<br />
