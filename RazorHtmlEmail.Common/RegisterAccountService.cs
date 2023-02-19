@@ -14,8 +14,7 @@ namespace RazorHtmlEmail.Common
     public class RegisterAccountService : IRegisterAccountService
     {
         private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
-        public string fromEmail = "gershymenzer@gmail.com";//lines 30, 40, 
-        //create a service foreach type of email
+        public string fromEmail = "<PLACE YOU'RE EMAIL>";
         public RegisterAccountService(IRazorViewToStringRenderer razorViewToStringRenderer)
         {
             _razorViewToStringRenderer = razorViewToStringRenderer;
@@ -53,7 +52,7 @@ namespace RazorHtmlEmail.Common
         {
             SmtpClient client = new SmtpClient()
             {
-                //smtp client needs to be set up under apps in google security
+                //smtp client needs to be set up in google under security -> App passwords 
                 Host = "smtp.gmail.com",
                 Port = 587,
                 EnableSsl = true,
@@ -61,8 +60,8 @@ namespace RazorHtmlEmail.Common
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential()
                 {
-                    UserName = "gershymenzer@gmail.com",
-                    Password = "quokwjzqyyppeltk"
+                    UserName = "<PLACE YOU'RE EMAIL>",
+                    Password = "<PLACE YOU'RE PASSWORD>"
                 }
             };
             MailAddress fromEmail = new MailAddress(fromAddress);
