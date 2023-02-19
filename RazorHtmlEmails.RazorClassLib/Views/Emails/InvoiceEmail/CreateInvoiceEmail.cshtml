@@ -17,26 +17,17 @@
         </tr>
     </thead>
     <tbody>
-        @if(Model.plug_amt > 0)
+        @foreach (var item in Model.items)
         {
             <tr>
-                <td>Plug</td>
-                <td>@Model.plug_amt</td>
-                <td>@Model.amt_due</td>
+                <td>@item.name</td>
+                <td>@item.amount</td>
+                <td>@item.price</td>
             </tr>
         }
-        @if(Model.tire_amt > 0)
-        {
-            <tr>
-                <td>Tire's</td>
-                <td>@Model.tire_amt</td>
-                <td>@Model.amt_due</td>
-            </tr>
-        }
-
         <tr>
             <td>Total</td>
-            <td>@Model.amt_due</td>
+            <td>@Model.total</td>
         </tr>
     </tbody>
 </table>

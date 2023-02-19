@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
 using RazorHtmlEmails.RazorClassLib.Views.Emails.InvoiceEmail;
+using RazorHtmlEmails.RazorClassLib;
+using Newtonsoft.Json;
 
 namespace RazorHtmlEmail.Common
 {
     public class RegisterAccountService : IRegisterAccountService
     {
         private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
-
+        public string fromEmail = "gershymenzer@gmail.com";//lines 30, 40, 
         //create a service foreach type of email
         public RegisterAccountService(IRazorViewToStringRenderer razorViewToStringRenderer)
         {
@@ -27,19 +29,26 @@ namespace RazorHtmlEmail.Common
             string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
 
             var toAddress = email;
-            var fromAddress = "<ADD YOUR EMAIL HERE>";
+            var fromAddress = fromEmail;
             SendEmail(toAddress, fromAddress, "Please confirm", body);
         }
-        public async Task Invoice(string email, string baseUrl, int order_id, int plug_amt, int tire_amt, decimal amt_due, DateTime date)
+        public async Task Invoice(string email, string baseUrl, int order_id, string jsonArray, DateTime date)
         {
-            var CreateInvoiceModel = new CreateInvoiceEmailViewModel($"{baseUrl}/{Guid.NewGuid()}", order_id, plug_amt, tire_amt, amt_due, date);
+            List<item> items = JsonConvert.DeserializeObject<List<item>>(jsonArray);
+            decimal total = 0;
+            foreach (var item in items)
+            {
+                total += item.price;
+            }
+            var CreateInvoiceModel = new CreateInvoiceEmailViewModel($"{baseUrl}/{Guid.NewGuid()}", order_id, items,total, date);
 
             string body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/InvoiceEmail/CreateInvoiceEmail.cshtml", CreateInvoiceModel);
 
             var toAddress = email;
-            var fromAddress = "<ADD YOUR EMAIL HERE>";
+            var fromAddress = fromEmail;
             SendEmail(toAddress, fromAddress, "Here's youre invoice", body);
         }
+        //handles smtp details -> sends email
         public static void SendEmail(string toAddresses, string fromAddress, string subject, string body)
         {
             SmtpClient client = new SmtpClient()
@@ -52,14 +61,12 @@ namespace RazorHtmlEmail.Common
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential()
                 {
-                    UserName = "<ADD YOUR EMAIL HERE>",
-                    Password = "<PASSWORD (RANDOM)>"
+                    UserName = "gershymenzer@gmail.com",
+                    Password = "quokwjzqyyppeltk"
                 }
             };
             MailAddress fromEmail = new MailAddress(fromAddress);
-            MailAddress toEmail = new MailAddress(toAddresses);
-
-            //creating and sending in Register method -sendEmail method handles smtp only
+            MailAddress toEmail = new MailAddress(toAddresses);           
 
             MailMessage msg = new MailMessage()
             {
@@ -84,7 +91,7 @@ namespace RazorHtmlEmail.Common
     public interface IRegisterAccountService
     {
         Task Register(string email, string baseUrl);
-        Task Invoice(string email, string baseUrl, int order_id, int plug_amt, int tire_amt, decimal amt_due, DateTime date);
+        Task Invoice(string email, string baseUrl, int order_id, string jsonArray, DateTime date);
     }
    
 }

@@ -1,3 +1,3 @@
 ﻿namespace RazorHtmlEmails.RazorClassLib.Views.Emails.InvoiceEmail;
 
-public record CreateInvoiceEmailViewModel(string baseUrl, int order_id, int plug_amt, int tire_amt, decimal amt_due, DateTime date);
+public record CreateInvoiceEmailViewModel(string baseUrl, int order_id, List<item> items, decimal total, DateTime date);
